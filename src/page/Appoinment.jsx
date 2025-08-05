@@ -1,41 +1,7 @@
-//import { Calendar } from 'lucide-react'
-//import React from 'react'
-//import CalendarHeader from '../componets/CalenderHeader'
-//import CalenderDays from  '../componets/CalenderDays'
-//import AppointmentCard from '../componets/AppoinmentCard'
-//import Timer from '../componets/Timer'
-//import DepressionLevel from '../componets/DepressionLevel'
-//import MainAppointment from '../componets/MainAppoinment'
-
-// const Appoinment = () => {
-//   return ( 
-//     <div>
-//     <CalendarHeader/>
-//     <CalenderDays/>
-//     {/* <AppointmentCard/> */}
-//     <Timer/>
-//     {/* <Note/> */}
-//     <DepressionLevel/>
-//     <MainAppointment/>
-    
-//     </div> 
-    
-//   )
-// }
-//export default Appoinment;
-
 import React from 'react'
 import  { useState, useEffect } from 'react';
 import { 
-  Calendar, 
-  Users, 
-  Activity, 
-  Settings, 
-  Search, 
-  Bell, 
-  MessageCircle,
   User,
-  Home,
   Clock,
   Play,
   Pause,
@@ -46,68 +12,13 @@ import {
   MapPin,
   MoreVertical
 } from 'lucide-react';
+import SlideNavbar from '../componets/SlideNavbar';
+import HeaderNavbar from '../componets/HeaderNavbar';
 
-// Header Component
-const Header = () => {
-  return (
-    <div className="flex items-center justify-between p-4 bg-white">
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-            <Activity className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-semibold text-gray-800">SoulCare</span>
-        </div>
-      </div>
-      
-      <div className="flex items-center space-x-4">
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <Search className="w-5 h-5 text-gray-600" />
-        </button>
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <Bell className="w-5 h-5 text-gray-600" />
-        </button>
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <MessageCircle className="w-5 h-5 text-gray-600" />
-        </button>
-        <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-500 rounded-full"></div>
-      </div>
-    </div>
-  );
-};
+
 
 // Sidebar Component
-const Sidebar = ({ activeTab, setActiveTab }) => {
-  const menuItems = [
-    { id: 'dashboard', icon: Home, label: 'Dashboard' },
-    { id: 'appointments', icon: Calendar, label: 'Appointments' },
-    { id: 'patients', icon: Users, label: 'Patients' },
-    { id: 'activity', icon: Activity, label: 'Activity' },
-    { id: 'settings', icon: Settings, label: 'Settings' }
-  ];
 
-  return (
-    <div className="w-16 bg-blue-900 flex flex-col items-center py-4 space-y-4">
-      {menuItems.map((item) => {
-        const Icon = item.icon;
-        return (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`p-3 rounded-lg transition-colors ${
-              activeTab === item.id 
-                ? 'bg-blue-700 text-white' 
-                : 'text-blue-300 hover:text-white hover:bg-blue-800'
-            }`}
-            title={item.label}
-          >
-            <Icon className="w-5 h-5" />
-          </button>
-        );
-      })}
-    </div>
-  );
-};
 
 // Calendar Header Component
 const CalendarHeader = ({ selectedWeek, setSelectedWeek }) => {
@@ -429,11 +340,10 @@ const Chat = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      
+      <SlideNavbar/>
       <div className="flex-1 flex flex-col">
-        <Header />
-        
+         
+        <HeaderNavbar/>
         <div className="flex-1 p-6">
           <div className="grid grid-cols-12 gap-6">
             {/* Main Calendar Area */}

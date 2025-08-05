@@ -1,462 +1,238 @@
-import React from 'react'
-import  { useState, useEffect } from 'react';
-import { 
-  Calendar, 
-  Users, 
-  Activity, 
-  Settings, 
-  Search, 
-  Bell, 
-  MessageCircle,
-  User,
-  Home,
-  Clock,
-  Play,
-  Pause,
-  Plus,
-  Minus,
-  Coffee,
-  Video,
-  MapPin,
-  MoreVertical
-} from 'lucide-react';
+import React, { useState } from 'react';
+import {Camera} from 'lucide-react';
+import SlideNavbar from '../componets/SlideNavbar';
+import HeaderNavbar from '../componets/HeaderNavbar';
 
-// Header Component
-const Header = () => {
-  return (
-    <div className="flex items-center justify-between p-4 bg-white">
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-            <Activity className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-semibold text-gray-800">SoulCare</span>
-        </div>
-      </div>
-      
-      <div className="flex items-center space-x-4">
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <Search className="w-5 h-5 text-gray-600" />
-        </button>
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <Bell className="w-5 h-5 text-gray-600" />
-        </button>
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <MessageCircle className="w-5 h-5 text-gray-600" />
-        </button>
-        <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-500 rounded-full"></div>
-      </div>
-    </div>
-  );
-};
-
-// Sidebar Component
-const Sidebar = ({ activeTab, setActiveTab }) => {
-  const menuItems = [
-    { id: 'dashboard', icon: Home, label: 'Dashboard' },
-    { id: 'appointments', icon: Calendar, label: 'Appointments' },
-    { id: 'patients', icon: Users, label: 'Patients' },
-    { id: 'activity', icon: Activity, label: 'Activity' },
-    { id: 'settings', icon: Settings, label: 'Settings' }
-  ];
-
-  return (
-    <div className="w-16 bg-blue-900 flex flex-col items-center py-4 space-y-4">
-      {menuItems.map((item) => {
-        const Icon = item.icon;
-        return (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`p-3 rounded-lg transition-colors ${
-              activeTab === item.id 
-                ? 'bg-blue-700 text-white' 
-                : 'text-blue-300 hover:text-white hover:bg-blue-800'
-            }`}
-            title={item.label}
-          >
-            <Icon className="w-5 h-5" />
-          </button>
-        );
-      })}
-    </div>
-  );
-};
-
-// Calendar Header Component
-const CalendarHeader = ({ selectedWeek, setSelectedWeek }) => {
-  const weekOptions = [
-    "May 05 - May 9",
-    "May 07 - 2024",
-    "May 12 - May 16"
-  ];
-
-  return (
-    <div className="flex items-center justify-between mb-6">
-      <div>
-        <div className="text-sm text-gray-500 mb-1">Dashboard</div>
-        <h1 className="text-2xl font-bold text-gray-800">My Appointment ....</h1>
-      </div>
-      <div className="flex items-center space-x-4">
-        <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg text-sm font-medium">
-          {selectedWeek}
-        </div>
-        <select 
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={selectedWeek}
-          onChange={(e) => setSelectedWeek(e.target.value)}
-        >
-          {weekOptions.map(week => (
-            <option key={week} value={week}>{week}</option>
-          ))}
-        </select>
-      </div>
-    </div>
-  );
-};
-
-// Calendar Days Component
-const CalendarDays = ({ selectedDate, setSelectedDate }) => {
-  const days = [
-    { date: '05', day: 'Mon', isToday: false },
-    { date: '06', day: 'Tue', isToday: false },
-    { date: '07', day: 'Thu', isToday: false },
-    { date: '08', day: 'Wed', isToday: true },
-    { date: '09', day: 'Fri', isToday: false }
-  ];
-
-  return (
-    <div className="flex justify-between mb-6">
-      <div className="text-sm text-gray-500">GMT+5</div>
-      <div className="flex space-x-8">
-        {days.map((day) => (
-          <button
-            key={day.date}
-            onClick={() => setSelectedDate(day.date)}
-            className={`text-center p-2 rounded-lg transition-colors ${
-              day.isToday || selectedDate === day.date
-                ? 'bg-blue-100 text-blue-800' 
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <div className="text-lg font-semibold">{day.date}</div>
-            <div className="text-xs">{day.day}</div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Appointment Card Component
-const AppointmentCard = ({ appointment }) => {
-  const getCardColor = (type) => {
-    switch(type) {
-      case 'session': return 'bg-red-200 border-red-300';
-      case 'health': return 'bg-green-200 border-green-300';
-      case 'break': return 'bg-blue-200 border-blue-300';
-      case 'meeting': return 'bg-yellow-200 border-yellow-300';
-      default: return 'bg-gray-200 border-gray-300';
-    }
-  };
-
-  const getTextColor = (type) => {
-    switch(type) {
-      case 'session': return 'text-red-800';
-      case 'health': return 'text-green-800';
-      case 'break': return 'text-blue-800';
-      case 'meeting': return 'text-yellow-800';
-      default: return 'text-gray-800';
-    }
-  };
-
-  return (
-    <div className={`p-3 rounded-lg border-l-4 ${getCardColor(appointment.type)} ${getTextColor(appointment.type)}`}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="font-medium text-sm mb-1">{appointment.title}</div>
-          <div className="flex items-center space-x-2 text-xs">
-            {appointment.location && (
-              <div className="flex items-center">
-                <MapPin className="w-3 h-3 mr-1" />
-                <span>{appointment.location}</span>
-              </div>
-            )}
-            {appointment.platform && (
-              <div className="flex items-center">
-                <Video className="w-3 h-3 mr-1" />
-                <span>{appointment.platform}</span>
-              </div>
-            )}
-            {appointment.duration && (
-              <div className="flex items-center">
-                <Clock className="w-3 h-3 mr-1" />
-                <span>{appointment.duration}</span>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center space-x-1">
-          {appointment.attendees && appointment.attendees.map((attendee, index) => (
-            <div key={index} className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-xs text-white">
-              {attendee}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Timer Component
-const TimerFocus = () => {
-  const [time, setTime] = useState(3600); // 1 hour in seconds
-  const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    let interval;
-    if (isRunning && time > 0) {
-      interval = setInterval(() => {
-        setTime(time => time - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning, time]);
-
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hours}h ${minutes.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
-  };
-
-  const adjustTime = (delta) => {
-    setTime(Math.max(0, time + delta));
-  };
-
-  return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">Timer focus</h3>
-      
-      <div className="text-center mb-6">
-        <div className="text-3xl font-bold text-gray-800 mb-4">
-          {formatTime(time)}
-        </div>
-        
-        <div className="flex items-center justify-center space-x-4 mb-4">
-          <button 
-            onClick={() => adjustTime(-300)}
-            className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-          <button 
-            onClick={() => setIsRunning(!isRunning)}
-            className={`p-3 rounded-lg ${isRunning ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
-          >
-            {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-          </button>
-          <button 
-            onClick={() => adjustTime(300)}
-            className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-        </div>
-        
-        <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
-          Start timer
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Notes Component
-const NotesSection = () => {
-  return (
-    <div className="bg-blue-400 rounded-xl p-6 text-white mb-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">Note</h3>
-        <MoreVertical className="w-5 h-5" />
-      </div>
-    </div>
-  );
-};
-
-// Depression Level Component
-const DepressionLevel = () => {
-  const levels = [
-    { label: 'Low', color: 'bg-green-200', active: true },
-    { label: 'Medium', color: 'bg-yellow-200', active: false },
-    { label: 'High', color: 'bg-red-200', active: false }
-  ];
-
-  return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">Depression Level</h3>
-      
-      <div className="space-y-3 mb-4">
-        {levels.map((level, index) => (
-          <div key={level.label} className="flex items-center space-x-3">
-            <div className={`w-4 h-4 rounded ${level.color} ${level.active ? 'ring-2 ring-blue-500' : ''}`}></div>
-            <span className="text-sm text-gray-600">{level.label}</span>
-          </div>
-        ))}
-      </div>
-      
-      <div className="relative">
-        <div className="w-24 h-24 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-          <User className="w-12 h-12 text-blue-500" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Quote Component
-const MotivationalQuote = () => {
-  return (
-    <div className="bg-gray-100 rounded-xl p-6">
-      <div className="text-gray-800 text-sm leading-relaxed italic">
-        "Take charge of your well being your future self will thank you."
-      </div>
-    </div>
-  );
-};
-
-// Main Appointment Component
 const Chat = () => {
-  const [activeTab, setActiveTab] = useState('appointments');
-  const [selectedWeek, setSelectedWeek] = useState('May 07 - 2024');
-  const [selectedDate, setSelectedDate] = useState('08');
+  const [message, setMessage] = useState('');
+  const [chatMessages, setChatMessages] = useState([
+    {
+      id: 1,
+      text: 'Hi, good morning',
+      sender: 'other',
+      time: '9:00 AM',
+    },
+    {
+      id: 2,
+      text: 'good morning',
+      sender: 'me',
+      time: '9:02 AM',
+    },
+  ]);
 
-  const timeSlots = [
-    '8:00 AM',
-    '9:00 AM',
-    '10:00 AM',
-    '11:00 AM'
+  const chatList = [
+    {
+      id: 1,
+      name: 'Martin Randolph',
+      avatar: '👨‍💼',
+      lastMessage: 'Hi, How are you, I want to',
+      time: '11/19/19',
+      isActive: true,
+    },
+    {
+      id: 2,
+      name: 'Andrew Parker',
+      avatar: '👨‍🦱',
+      lastMessage: 'What kind of strategy is better?',
+      time: '11/16/19',
+      isActive: false,
+    },
+    {
+      id: 3,
+      name: 'Karen Castillo',
+      avatar: '👩‍💼',
+      lastMessage: 'What kind of strategy is better?',
+      time: '11/15/19',
+      isActive: false,
+    },
+    {
+      id: 4,
+      name: 'Maximilian Jacobson',
+      avatar: '👨‍🔬',
+      lastMessage: 'Bro, I have a good idea!',
+      time: '10/30/19',
+      isActive: false,
+    },
+    {
+      id: 5,
+      name: 'Martha Craig',
+      avatar: '👩‍🦰',
+      lastMessage: '📷 Photo',
+      time: '10/28/19',
+      isActive: false,
+    },
+    {
+      id: 6,
+      name: 'Tabitha Potter',
+      avatar: '👩‍🦳',
+      lastMessage:
+        'Actually I wanted to check with you about your online business plan so...',
+      time: '8/25/19',
+      isActive: false,
+    },
+    {
+      id: 7,
+      name: 'Maisy Humphrey',
+      avatar: '👩‍🎨',
+      lastMessage:
+        'Welcome, to make design process faster, look at Pixsellz',
+      time: '8/20/19',
+      isActive: false,
+    },
+    {
+      id: 8,
+      name: 'Kieron Dotson',
+      avatar: '👨‍🎤',
+      lastMessage: 'Ok, have a good trip',
+      time: '7/29/19',
+      isActive: false,
+    },
   ];
 
-  const appointments = {
-    '9:00 AM': [
-      { 
-        title: 'session', 
-        type: 'session', 
-        platform: 'Zoom', 
-        duration: '1h', 
-        attendees: ['+2'] 
-      }
-    ],
-    '9:00 AM_2': [
-      { 
-        title: 'chathura', 
-        type: 'health', 
-        location: 'Health Center', 
-        duration: '15 min' 
-      },
-      { 
-        title: 'sihum', 
-        type: 'health', 
-        location: 'Xfun', 
-        duration: '1h' 
-      }
-    ],
-    '10:00 AM': [
-      { 
-        title: 'session', 
-        type: 'meeting', 
-        platform: 'Zoom', 
-        duration: '2h', 
-        attendees: ['+2'] 
-      },
-      { 
-        title: 'session', 
-        type: 'session', 
-        platform: 'Zoom', 
-        duration: '1h', 
-        attendees: ['+2'] 
-      }
-    ],
-    '11:00 AM': [
-      { 
-        title: 'Coffee break', 
-        type: 'break', 
-        duration: '30 min', 
-        icon: Coffee 
-      },
-      { 
-        title: 'Madhawa', 
-        type: 'health', 
-        location: 'Park', 
-        duration: '1h' 
-      },
-      { 
-        title: 'session', 
-        type: 'session', 
-        platform: 'Zoom', 
-        duration: '1h', 
-        attendees: ['+2'] 
-      }
-    ]
+  const handleSend = () => {
+    if (message.trim()) {
+      setChatMessages([
+        ...chatMessages,
+        {
+          id: Date.now(),
+          text: message,
+          sender: 'me',
+          time: 'Now',
+        },
+      ]);
+      setMessage('');
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <SlideNavbar/>
       
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
-        <Header />
+        {/* Header Navbar */}
+        <HeaderNavbar/>
         
-        <div className="flex-1 p-6">
-          <div className="grid grid-cols-12 gap-6">
-            {/* Main Calendar Area */}
-            <div className="col-span-8">
-              <CalendarHeader 
-                selectedWeek={selectedWeek} 
-                setSelectedWeek={setSelectedWeek} 
-              />
-              
-              <CalendarDays 
-                selectedDate={selectedDate} 
-                setSelectedDate={setSelectedDate} 
-              />
-              
-              {/* Time Slots and Appointments */}
-              <div className="space-y-4">
-                {timeSlots.map((timeSlot) => (
-                  <div key={timeSlot} className="flex">
-                    <div className="w-20 text-sm text-gray-500 font-medium pt-2">
-                      {timeSlot}
+        {/* Chat Interface */}
+        <div className="flex-1 bg-gray-50 flex">
+          {/* Chat List */}
+          <div className="w-80 bg-white">
+            <div className="p-6">
+              <div className="text-center mb-6">
+                <p className="text-sm text-gray-600 font-medium">
+                  "I hear you. Your feelings matter."
+                </p>
+              </div>
+            </div>
+
+            <div className="px-6 mb-4">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Chats</h2>
+              <div className="flex space-x-6">
+                <span className="text-sm text-gray-500 cursor-pointer">
+                  Broadcast Lists
+                </span>
+                <span className="text-sm text-teal-500 cursor-pointer border-b-2 border-teal-500">
+                  New Group
+                </span>
+              </div>
+            </div>
+
+            <div className="overflow-y-auto h-96">
+              {chatList.map((chat) => (
+                <div
+                  key={chat.id}
+                  className={`px-6 py-3 cursor-pointer hover:bg-gray-50 ${
+                    chat.isActive
+                      ? 'bg-teal-50 border-r-[3px] border-r-teal-500'
+                      : ''
+                  }`}
+                >
+                  <div className="flex items-start space-x-3">
+                    <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-lg flex-shrink-0">
+                      {chat.avatar}
                     </div>
-                    <div className="flex-1 grid grid-cols-5 gap-4">
-                      {/* Show appointments for this time slot */}
-                      {appointments[timeSlot] && (
-                        <div className="space-y-2">
-                          {appointments[timeSlot].map((appointment, index) => (
-                            <AppointmentCard key={index} appointment={appointment} />
-                          ))}
-                        </div>
-                      )}
-                      {appointments[`${timeSlot}_2`] && (
-                        <div className="space-y-2">
-                          {appointments[`${timeSlot}_2`].map((appointment, index) => (
-                            <AppointmentCard key={index} appointment={appointment} />
-                          ))}
-                        </div>
-                      )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="text-sm font-medium text-gray-900">
+                          {chat.name}
+                        </h3>
+                        <span className="text-xs text-gray-500">{chat.time}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 truncate">
+                        {chat.lastMessage}
+                      </p>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Chat Area */}
+          <div className="flex-1 flex flex-col bg-gradient-to-br from-teal-200 to-teal-300">
+            {/* Chat Header */}
+            <div className="bg-white bg-opacity-80 backdrop-blur-sm p-4 border-b border-white border-opacity-30">
+              <div className="flex items-center justify-center">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-lg">
+                    👨‍💼
+                  </div>
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Martin Randolph
+                  </h2>
+                </div>
               </div>
             </div>
-            
-            {/* Right Sidebar */}
-            <div className="col-span-4 space-y-6">
-              <TimerFocus />
-              <NotesSection />
-              <DepressionLevel />
-              <MotivationalQuote />
+
+            {/* Messages Area */}
+            <div className="flex-1 p-6 space-y-4 overflow-y-auto">
+              {chatMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${
+                    msg.sender === 'me' ? 'justify-end' : 'justify-start'
+                  }`}
+                >
+                  <div
+                    className={`max-w-xs px-4 py-3 rounded-2xl ${
+                      msg.sender === 'me'
+                        ? 'bg-white bg-opacity-90 text-gray-800 ml-auto'
+                        : 'bg-teal-500 bg-opacity-80 text-white'
+                    }`}
+                  >
+                    <p className="text-sm">{msg.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Message Input */}
+            <div className="p-4">
+              <div className="bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl p-3">
+                <div className="flex items-center space-x-3">
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="message"
+                      className="w-full bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex space-x-2 items-center">
+                    <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-300">
+                      <Camera className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <button
+                      onClick={handleSend}
+                      className="bg-teal-500 hover:bg-teal-600 text-white text-sm px-4 py-1 rounded-full"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -464,7 +240,5 @@ const Chat = () => {
     </div>
   );
 };
-
-
 
 export default Chat;

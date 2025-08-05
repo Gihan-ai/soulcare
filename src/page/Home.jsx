@@ -1,74 +1,21 @@
-// import React from 'react'
-// import VisitsTodayCard from '../componets/VisitTodayCard'
-// import PatientList from '../componets/PatientList'
-
-// const Home = () => {
-  // return (
-  //   <div>
-  //     <VisitsTodayCard/>
-  //     <PatientList/>
-  //      <h1 className="text-lg font-medium text-gray-700">
-  //         Good Morning <span className="font-bold text-blue-800">gihan!</span>
-  //       </h1>
-  //   </div>
-  // )
-
-
-  //import React, { useState } from 'react';
 import React, { useState } from 'react';
 import {
   Calendar,
   Users,
   Activity,
-   Settings,
-  Search,
-  Bell,
-  MessageCircle,
   TrendingUp,
   TrendingDown,
   User,
-  Home as HomeIcon, // ✅ renamed to avoid conflict
+  Home as HomeIcon,
+  Edit3,
+  Mail,
+  Phone,
+  MapPin,
+  Award,
+  Clock,
 } from 'lucide-react';
 import HeaderNavbar from '../componets/HeaderNavbar';
 import SlideNavbar from '../componets/SlideNavbar';
-
-// Header Component
-const Header = () => {
-  return (
-    <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-            <Activity className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-semibold text-gray-800">SoulCare</span>
-        </div>
-        <div className="text-gray-600">
-          Good Morning <span className="font-semibold text-gray-800">gihan!</span>
-        </div>
-      </div>
-
-      <div className="flex items-center space-x-4">
-        <div className="relative">
-          <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <Bell className="w-5 h-5 text-gray-600" />
-        </button>
-        <button className="p-2 hover:bg-gray-100 rounded-lg">
-          <MessageCircle className="w-5 h-5 text-gray-600" />
-        </button>
-        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-      </div>
-    </div>
-  );
-};
-
 
 // Stats Card Component
 const StatsCard = ({ title, value, change, isPositive, icon: Icon, color }) => {
@@ -228,12 +175,179 @@ const DoctorImageCard = () => {
   );
 };
 
+// Profile Card Component
+const ProfileCard = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [profile, setProfile] = useState({
+    name: 'Dr. Sarah Johnson',
+    specialization: 'Cardiologist',
+    experience: '8 years',
+    email: 'sarah.johnson@hospital.com',
+    phone: '+1 (555) 123-4567',
+    location: 'New York, NY',
+    rating: '4.9',
+    consultations: '2,456'
+  });
+
+  const handleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+    // Add save logic here
+  };
+
+  const handleInputChange = (field, value) => {
+    setProfile(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  return (
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-gray-800">Profile</h3>
+        <button
+          onClick={handleEdit}
+          className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <Edit3 className="w-4 h-4" />
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {/* Name */}
+        <div>
+          <label className="text-sm font-medium text-gray-600 block mb-1">Name</label>
+          {isEditing ? (
+            <input
+              type="text"
+              value={profile.name}
+              onChange={(e) => handleInputChange('name', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          ) : (
+            <div className="text-gray-800 font-medium">{profile.name}</div>
+          )}
+        </div>
+
+        {/* Specialization */}
+        <div>
+          <label className="text-sm font-medium text-gray-600 block mb-1">Specialization</label>
+          {isEditing ? (
+            <input
+              type="text"
+              value={profile.specialization}
+              onChange={(e) => handleInputChange('specialization', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          ) : (
+            <div className="text-gray-700">{profile.specialization}</div>
+          )}
+        </div>
+
+        {/* Experience */}
+        <div className="flex items-center space-x-2">
+          <Clock className="w-4 h-4 text-gray-500" />
+          <div>
+            <span className="text-sm text-gray-600">Experience: </span>
+            {isEditing ? (
+              <input
+                type="text"
+                value={profile.experience}
+                onChange={(e) => handleInputChange('experience', e.target.value)}
+                className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            ) : (
+              <span className="text-gray-800 font-medium">{profile.experience}</span>
+            )}
+          </div>
+        </div>
+
+        {/* Contact Info */}
+        <div className="space-y-2">
+          <div className="flex items-center space-x-2">
+            <Mail className="w-4 h-4 text-gray-500" />
+            {isEditing ? (
+              <input
+                type="email"
+                value={profile.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            ) : (
+              <span className="text-gray-700 text-sm">{profile.email}</span>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Phone className="w-4 h-4 text-gray-500" />
+            {isEditing ? (
+              <input
+                type="tel"
+                value={profile.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            ) : (
+              <span className="text-gray-700 text-sm">{profile.phone}</span>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <MapPin className="w-4 h-4 text-gray-500" />
+            {isEditing ? (
+              <input
+                type="text"
+                value={profile.location}
+                onChange={(e) => handleInputChange('location', e.target.value)}
+                className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            ) : (
+              <span className="text-gray-700 text-sm">{profile.location}</span>
+            )}
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="border-t border-gray-200 pt-4 mt-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center space-x-1">
+                <Award className="w-4 h-4 text-yellow-500" />
+                <span className="text-lg font-semibold text-gray-800">{profile.rating}</span>
+              </div>
+              <div className="text-xs text-gray-600">Rating</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-semibold text-gray-800">{profile.consultations}</div>
+              <div className="text-xs text-gray-600">Consultations</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Save button when editing */}
+        {isEditing && (
+          <button
+            onClick={handleSave}
+            className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Save Changes
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // Main Dashboard Component
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen flex" style={{backgroundColor: '#E3F2FD'}}>
       <SlideNavbar/>
       <div className="flex-1 flex flex-col">
         <HeaderNavbar />
@@ -291,6 +405,7 @@ const Dashboard = () => {
             <div className="col-span-4 space-y-6">
               <MotivationalCard />
               <DoctorImageCard />
+              <ProfileCard />
             </div>
           </div>
         </div>
@@ -300,6 +415,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-
